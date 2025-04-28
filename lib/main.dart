@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Gardırop Uygulaması',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.purple,
         scaffoldBackgroundColor:
             Colors.blueGrey.shade900, // Buğulu cam arka planı için
         useMaterial3: true,
