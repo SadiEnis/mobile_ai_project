@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:mobile_ai_project/screens/add_clothes_screen.dart';
+import 'package:mobile_ai_project/screens/clothes_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -8,7 +10,6 @@ class MainScreen extends StatefulWidget {
 
   @override
   State<MainScreen> createState() => _MainScreenState();
-  
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -62,8 +63,23 @@ class _MainScreenState extends State<MainScreen> {
                     leading: const Icon(Icons.add),
                     title: const Text('Kıyafet Ekle'),
                     onTap: () {
-                      // Kıyafet ekle sayfasına yönlendirme (sonra)
-                      Navigator.pop(context);
+                      // Kıyafet ekle sayfasına yönlendirme
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddClothesScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.checkroom),
+                    title: const Text('Kıyafetlerim'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ClothesScreen()),
+                      );
                     },
                   ),
                   ListTile(
@@ -96,6 +112,11 @@ class _MainScreenState extends State<MainScreen> {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 // Kıyafet ekle
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddClothesScreen()),
+                );
               },
               child: const Icon(Icons.add),
             ),
