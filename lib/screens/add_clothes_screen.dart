@@ -16,7 +16,14 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
   File? _selectedImage;
   final TextEditingController _nameController = TextEditingController();
   String? _selectedCategory;
-  final List<String> _categories = ['Üst', 'Alt', 'Dış Giyim', 'Ayakkabı'];
+  final List<String> _categories = [
+    'Baş',
+    'Üst',
+    'Alt',
+    'Dış Giyim',
+    'Çanta',
+    'Ayakkabı'
+  ];
 
   final ImagePicker _picker = ImagePicker();
 

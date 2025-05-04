@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mobile_ai_project/screens/add_clothes_screen.dart';
+import 'package:mobile_ai_project/screens/add_combine_screen.dart';
 import 'package:mobile_ai_project/screens/clothes_screen.dart';
+import 'package:mobile_ai_project/screens/combine_detail_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,16 +19,19 @@ class _MainScreenState extends State<MainScreen> {
   bool _isLoggedIn = false;
   String _username = '';
   String _gender = '';
+  List<Map<String, dynamic>> _combinations = [];
 
-  List<String> dummyCombinations = [
-    "Kombin 1",
-    "Kombin 2",
-    "Kombin 3",
-    "Kombin 4",
-    "Kombin 5",
-    "Kombin 6",
-    "Kombin 7",
-  ];
+  Future<List<Map<String, dynamic>>> loadCombinations() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/combines.json');
+    if (await file.exists()) {
+      final contents = await file.readAsString();
+      final List<dynamic> jsonList = json.decode(contents);
+      return jsonList.cast<Map<String, dynamic>>();
+    } else {
+      return [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +62,10 @@ class _MainScreenState extends State<MainScreen> {
                     leading: const Icon(Icons.home),
                     title: const Text('Ana Sayfa'),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const MainScreen();
+                      }));
                     },
                   ),
                   ListTile(
@@ -87,7 +96,11 @@ class _MainScreenState extends State<MainScreen> {
                     title: const Text('Kombin Ekle'),
                     onTap: () {
                       // Kombin ekle sayfasına yönlendirme (sonra)
-                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddCombineScreen()),
+                      );
                     },
                   ),
                   ListTile(
@@ -120,30 +133,24 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: const Icon(Icons.add),
             ),
-            //
-            body: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    'Hoş geldin, $_username!',
-                    style: const TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: dummyCombinations.length,
-                      itemBuilder: (context, index) {
-                        final kombin = dummyCombinations[index];
-                        // Kombinleri listelemek için ListView kullanıyoruz. Dummy kombin listesi yukarıda tanımlı.
-                        // ListView.builder ile listeyi oluşturuyoruz. itemCount ile kaç tane olduğunu belirtiyoruz.
-                        // itemBuilder ile de her bir elemanı oluşturuyoruz. Aşağıda tanımlı olan _frostedCard fonksiyonunu çağırıyoruz. Her bir kartın nasıl olacağını belirtiyoruz.
-                        return _frostedCard(kombin);
-                      },
-                    ),
-                  ),
-                ],
+            body: Expanded(
+              child: ListView.builder(
+                itemCount: _combinations.length,
+                itemBuilder: (context, index) {
+                  final kombin = _combinations[index];
+                  return _frostedCard(
+                    kombin['name'] ?? 'Kombin',
+                    () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CombineDetailScreen(combination: kombin),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
           )
@@ -179,6 +186,11 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _checkUser();
+    loadCombinations().then((data) {
+      setState(() {
+        _combinations = data;
+      });
+    });
   }
 
   Future<void> _checkUser() async {
@@ -253,28 +265,21 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _frostedCard(String text) {
+  Widget _frostedCard(String text, VoidCallback onTap) {
     return GestureDetector(
-      onTap: () {
-        // Kombin detayına yönlendirme (sonra yapılacak)
-      },
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
-        // margin kartların arasındaki boşluk, padding ise kartın içindeki boşluk.
         height: 120,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white.withOpacity(0.1),
-          // opacity ile arka plan rengini ayarlıyoruz. Opaklık ayarı yapıyoruz. Hafif buğulu gri bir görünümü olacak arka plan görünecek ama yazılar okunabilecek.
         ),
         child: ClipRRect(
-          // Kartın daha yumuşak bir görünüm kazanması için widget olarak ClipRRect kullanıyoruz. (slaytta yok yine)
           borderRadius: BorderRadius.circular(20),
           child: BackdropFilter(
-            // Kartlara hafif gölge efekti vermek için kullandık. x ve y kordinatları için ayrı ayrı ayarlanabiliyor.
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
-              // Bu widget'tan aşağısı artık kartın içeriği oluyor.
               alignment: Alignment.center,
               padding: const EdgeInsets.all(16),
               child: Text(
