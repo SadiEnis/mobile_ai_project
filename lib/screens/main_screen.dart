@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_ai_project/screens/add_clothes_screen.dart';
 import 'package:mobile_ai_project/screens/add_combine_screen.dart';
 import 'package:mobile_ai_project/screens/clothes_screen.dart';
-import 'package:mobile_ai_project/screens/combine_detail_screen.dart';
+import 'package:mobile_ai_project/screens/combines_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +19,6 @@ class _MainScreenState extends State<MainScreen> {
   bool _isLoggedIn = false;
   String _username = '';
   String _gender = '';
-  List<Map<String, dynamic>> _combinations = [];
 
   Future<List<Map<String, dynamic>>> loadCombinations() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -38,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
     return _isLoggedIn
         ? Scaffold(
             appBar: AppBar(
-              title: const Text('Gardırobum'),
+              title: const Text('Dolabım Şahane'),
               backgroundColor: Colors.blue.shade400,
             ),
             // Drawer ekledik. Kullanıcı giriş yapmışsa görünmesini istedik ve kullanıcının yapabileceği işlemleri tek bir bardan görsün istedik.
@@ -104,6 +103,18 @@ class _MainScreenState extends State<MainScreen> {
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.class_),
+                    title: const Text('Kombinlerim'),
+                    onTap: () {
+                      // Kombin ekle sayfasına yönlendirme (sonra)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CombinesScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.feedback),
                     title: const Text('Geri Bildirim'),
                     onTap: () {
@@ -133,26 +144,7 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: const Icon(Icons.add),
             ),
-            body: Expanded(
-              child: ListView.builder(
-                itemCount: _combinations.length,
-                itemBuilder: (context, index) {
-                  final kombin = _combinations[index];
-                  return _frostedCard(
-                    kombin['name'] ?? 'Kombin',
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CombineDetailScreen(combination: kombin),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+            body: Expanded(child: Center(child: Text("ANA SAYFA"))),
           )
         : Scaffold(
             body:
@@ -186,11 +178,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _checkUser();
-    loadCombinations().then((data) {
-      setState(() {
-        _combinations = data;
-      });
-    });
   }
 
   Future<void> _checkUser() async {
@@ -261,38 +248,6 @@ class _MainScreenState extends State<MainScreen> {
       child: Text(
         gender,
         style: const TextStyle(fontSize: 18, color: Colors.white),
-      ),
-    );
-  }
-
-  Widget _frostedCard(String text, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white.withOpacity(0.1),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

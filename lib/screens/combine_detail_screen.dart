@@ -64,7 +64,10 @@ class CombineDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(combination['name'] ?? 'Kombin Detayı')),
+      appBar: AppBar(
+        title: Text(combination['name'] ?? 'Kombin Detayı'),
+        backgroundColor: Colors.blue.shade400,
+      ),
       body: FutureBuilder<Map<String, String>>(
         future: _getClothingPaths(),
         builder: (context, snapshot) {

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:mobile_ai_project/screens/add_clothes_screen.dart';
 import 'package:path_provider/path_provider.dart';
@@ -123,7 +122,10 @@ class _MyClothesScreenState extends State<ClothesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kıyafetlerim')),
+      appBar: AppBar(
+        title: const Text('Kıyafetlerim'),
+        backgroundColor: Colors.blue.shade400,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: GridView.builder(

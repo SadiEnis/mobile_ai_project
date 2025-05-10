@@ -54,11 +54,14 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
   }
 
   Widget _buildClothSelector(String title) {
-    final filtered = _filteredClothes(title);
+    var filtered = _filteredClothes(title);
+    if (title == "DışGiyim") {
+      filtered = _filteredClothes("Üst");
+    } else {
+      filtered = _filteredClothes(title);
+    }
     final currentIndex = _indices[title]!;
-    final selected =
-        filtered.isEmpty ? null : filtered[currentIndex % filtered.length];
-    _selected[title] = selected;
+    final selected = _selected[title]; // Değeri doğrudan al
 
     return Column(
       children: [
@@ -70,34 +73,45 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
           children: [
             IconButton(
               icon: const Icon(Icons.arrow_left),
-              onPressed: filtered.isEmpty
+              onPressed: (filtered.isEmpty || selected == null)
                   ? null
                   : () {
                       setState(() {
                         _indices[title] = (currentIndex - 1 + filtered.length) %
                             filtered.length;
+                        _selected[title] =
+                            filtered[_indices[title]! % filtered.length];
                       });
                     },
             ),
             Container(
               width: 80,
               height: 110,
-              decoration:
-                  BoxDecoration(border: Border.all(), color: Colors.grey[200]),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                color: Colors.grey[200],
+              ),
               child: selected != null
                   ? Image.file(File(selected['path']), fit: BoxFit.cover)
-                  : const Center(child: Text('Boş')),
+                  : const Center(
+                      child: Text(
+                        'Boş',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
             ),
             Column(
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_right),
-                  onPressed: filtered.isEmpty
+                  onPressed: (filtered.isEmpty)
                       ? null
                       : () {
                           setState(() {
                             _indices[title] =
                                 (currentIndex + 1) % filtered.length;
+                            _selected[title] =
+                                filtered[_indices[title]! % filtered.length];
                           });
                         },
                 ),
@@ -105,8 +119,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
                   icon: const Icon(Icons.close, color: Colors.red),
                   onPressed: () {
                     setState(() {
-                      _selected[title] = null;
-                      _indices[title] = 0;
+                      _selected[title] = null; // seçimi kaldır
                     });
                   },
                 ),
@@ -170,16 +183,22 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kombin Ekle')),
+      appBar: AppBar(
+        title: const Text('Kombin Ekle'),
+        backgroundColor: Colors.blue.shade400,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Kombin İsmi',
-                border: OutlineInputBorder(),
+            Container(
+              width: 300,
+              child: TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Kombin İsmi',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -198,13 +217,17 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
             ),
             _buildClothSelector('Ayakkabı'),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                await _saveCombination();
-                Navigator.pop(context, true); // 👈 Ana sayfaya 'true' ile dön
-              },
-              child: const Text('Kaydet'),
-            )
+            Container(
+              width: 200,
+              height: 45,
+              child: ElevatedButton(
+                onPressed: () async {
+                  await _saveCombination();
+                  Navigator.pop(context, true); // 👈 Ana sayfaya 'true' ile dön
+                },
+                child: const Text('Kaydet'),
+              ),
+            ),
           ],
         ),
       ),

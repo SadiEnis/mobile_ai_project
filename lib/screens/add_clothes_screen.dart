@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,59 +29,75 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kıyafet Ekle')),
+      appBar: AppBar(
+        title: const Text('Kıyafet Ekle'),
+        backgroundColor: Colors.blue.shade400,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: _showImageSourceModal,
-                child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12),
+          child: Center(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: _showImageSourceModal,
+                  child: Container(
+                    height: 400,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: _selectedImage == null
+                        ? const Center(child: Icon(Icons.add, size: 50))
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child:
+                                Image.file(_selectedImage!, fit: BoxFit.cover),
+                          ),
                   ),
-                  child: _selectedImage == null
-                      ? const Center(child: Icon(Icons.add, size: 50))
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(_selectedImage!, fit: BoxFit.cover),
-                        ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Kıyafet İsmi',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Kıyafet İsmi',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Kıyafet Türü',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      labelText: 'Kıyafet Türü',
+                      border: OutlineInputBorder(),
+                    ),
+                    value: _selectedCategory,
+                    items: _categories
+                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    },
+                  ),
                 ),
-                value: _selectedCategory,
-                items: _categories
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCategory = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _saveClothes,
-                child: const Text('Kaydet'),
-              ),
-            ],
+                const SizedBox(height: 24),
+                Container(
+                  width: 150,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: _saveClothes,
+                    child: const Text('Kaydet'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
