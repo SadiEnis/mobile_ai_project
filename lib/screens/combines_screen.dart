@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:mobile_ai_project/appbar_provider.dart';
 import 'package:mobile_ai_project/screens/combine_detail_screen.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class CombinesScreen extends StatefulWidget {
   const CombinesScreen({super.key});
@@ -32,7 +34,7 @@ class _MainScreenState extends State<CombinesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gardırobum'),
-        backgroundColor: Colors.blue.shade400,
+        backgroundColor: context.watch<AppBarThemeProvider>().appBarColor,
       ),
       // Drawer ekledik. Kullanıcı giriş yapmışsa görünmesini istedik ve kullanıcının yapabileceği işlemleri tek bir bardan görsün istedik.
       body: Padding(

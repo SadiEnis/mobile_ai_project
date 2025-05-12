@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mobile_ai_project/screens/add_clothes_screen.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../appbar_provider.dart';
 
 class ClothesScreen extends StatefulWidget {
   const ClothesScreen({super.key});
@@ -124,7 +127,7 @@ class _MyClothesScreenState extends State<ClothesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kıyafetlerim'),
-        backgroundColor: Colors.blue.shade400,
+        backgroundColor: context.watch<AppBarThemeProvider>().appBarColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),

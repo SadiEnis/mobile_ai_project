@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../appbar_provider.dart';
 
 class AddCombineScreen extends StatefulWidget {
   const AddCombineScreen({super.key});
@@ -185,7 +188,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kombin Ekle'),
-        backgroundColor: Colors.blue.shade400,
+        backgroundColor: context.watch<AppBarThemeProvider>().appBarColor,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(12),

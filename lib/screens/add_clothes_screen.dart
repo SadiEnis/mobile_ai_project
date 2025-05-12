@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../appbar_provider.dart';
 
 class AddClothesScreen extends StatefulWidget {
   const AddClothesScreen({super.key});
@@ -15,14 +18,7 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
   File? _selectedImage;
   final TextEditingController _nameController = TextEditingController();
   String? _selectedCategory;
-  final List<String> _categories = [
-    'Baş',
-    'Üst',
-    'Alt',
-    'Dış Giyim',
-    'Çanta',
-    'Ayakkabı'
-  ];
+  final List<String> _categories = ['Baş', 'Üst', 'Alt', 'Çanta', 'Ayakkabı'];
 
   final ImagePicker _picker = ImagePicker();
 
@@ -31,7 +27,7 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kıyafet Ekle'),
-        backgroundColor: Colors.blue.shade400,
+        backgroundColor: context.watch<AppBarThemeProvider>().appBarColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),

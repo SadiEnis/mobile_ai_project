@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mobile_ai_project/appbar_provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class CombineDetailScreen extends StatelessWidget {
   final Map<String, dynamic> combination;
@@ -66,7 +68,7 @@ class CombineDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(combination['name'] ?? 'Kombin Detayı'),
-        backgroundColor: Colors.blue.shade400,
+        backgroundColor: context.watch<AppBarThemeProvider>().appBarColor,
       ),
       body: FutureBuilder<Map<String, String>>(
         future: _getClothingPaths(),
