@@ -17,6 +17,7 @@ class AppBarThemeProvider extends ChangeNotifier {
   late String _selectedColorName;
   bool _isDarkMode = false;
   bool _isInitialized = false;
+  // Uygulama başlatıldığında ayarların yüklendiğini kontrol etmek için kullanılır.
 
   Color get appBarColor => _appBarColor;
   String get selectedColorName => _selectedColorName;
@@ -24,11 +25,15 @@ class AppBarThemeProvider extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
 
   ThemeMode get themeMode => _isDarkMode ? ThemeMode.dark : ThemeMode.light;
+  // Sayfanın koyu mu açık mı olacağnı ThemeMode ile ayarlıyoruz.
+  // Koyu mod açık ise ThemeMode.dark, değilse ThemeMode.light döner.
 
   AppBarThemeProvider() {
     _selectedColorName = 'Mavi'; // varsayılan
     _appBarColor = colorOptions[_selectedColorName]!;
     _loadSettingsFromFile();
+
+    // Uygulama başlatıldığında ayarları dosyadan yükler.
   }
 
   Future<void> setColorByName(String name) async {
@@ -36,12 +41,20 @@ class AppBarThemeProvider extends ChangeNotifier {
     _appBarColor = colorOptions[name]!;
     notifyListeners();
     await _saveSettingsToFile();
+
+    // Renk değiştiğinde çağrılır.
+    // Kullanıcı arayüzünü günceller.
+    // notifyListeners() ile diğer sayfalara iletilir.
   }
 
   void toggleTheme(bool value) {
     _isDarkMode = value;
     notifyListeners();
     _saveSettingsToFile();
+
+    // Koyu mod açık/kapalı durumu değiştiğinde çağrılır.
+    // Kullanıcı arayüzünü günceller.
+    // notifyListeners() ile diğer sayfalara iletilir.
   }
 
   Future<void> _saveSettingsToFile() async {
@@ -53,9 +66,13 @@ class AppBarThemeProvider extends ChangeNotifier {
     } catch (e) {
       print('HATA: Ayarlar kaydedilemedi: $e');
     }
+    // Ayarları dosyaya kaydeder.
+    // Renk adı, renk değeri ve koyu mod durumu ile birlikte.
+    // Her birini ayırmak için '|' karakteri kullanılır.
   }
 
   Future<void> _loadSettingsFromFile() async {
+    // Dosyadan ayarları yükler.
     try {
       final file = await _getSettingsFile();
       if (await file.exists()) {
@@ -81,5 +98,7 @@ class AppBarThemeProvider extends ChangeNotifier {
   Future<File> _getSettingsFile() async {
     final dir = await getApplicationDocumentsDirectory();
     return File('${dir.path}/settings.txt');
+    // Ayarları saklamak için kullanılacak dosya yolu
+    // Uygulama belgeleri dizininde "settings.txt" adında bir dosya oluşturur.
   }
 }

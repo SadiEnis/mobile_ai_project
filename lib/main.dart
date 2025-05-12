@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_ai_project/appbar_provider.dart';
 import 'package:provider/provider.dart';
-import 'screens/main_screen.dart'; // Eğer main_screen.dart farklı bir yerdeyse yolu ayarla.
+
+import 'screens/main_screen.dart';
 
 void main() {
   runApp(
@@ -29,18 +30,23 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Debug banner'ı gizle
-      title: 'Kıyafet Uygulaması',
-      themeMode: provider.themeMode, // açık/koyu mod seçimi buradan yapılır
+
+      themeMode: provider.themeMode,
+      // açık/koyu mod seçimi buradan yapılır. Provider'dan alınır.
+
       theme: ThemeData(
         brightness: Brightness.light,
         appBarTheme: AppBarTheme(
           backgroundColor: provider.appBarColor,
+          // AppBar rengi burada ayarlanır. Provider'dan alınır
         ),
         scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(color: Colors.black),
         ),
       ),
+      // Açık tema için ayarlanır.
+
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         appBarTheme: AppBarTheme(

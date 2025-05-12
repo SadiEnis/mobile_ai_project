@@ -81,16 +81,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Icon(Icons.person, size: 40)),
                 ),
                 const SizedBox(height: 16),
+
                 Center(
                     child: Text(_name, style: const TextStyle(fontSize: 18))),
+
                 Center(
                     child: Text(_gender,
                         style: const TextStyle(color: Colors.grey))),
+
                 const Divider(height: 32),
+
                 const Text('Uygulama Ayarları',
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
                 const SizedBox(height: 8),
+
                 ListTile(
                   leading: const Icon(Icons.color_lens),
                   title: const Text('AppBar Rengini Değiştir'),
@@ -112,14 +118,76 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                 ),
-                SwitchListTile(
-                  secondary: const Icon(Icons.brightness_6),
+
+                ListTile(
+                  leading: const Icon(Icons.brightness_6),
                   title: const Text('Tema (Açık/Koyu)'),
-                  value: provider.isDarkMode,
-                  onChanged: (val) {
-                    provider.toggleTheme(val);
-                  },
+                  trailing: GestureDetector(
+                    onTap: () {
+                      provider.toggleTheme(!provider.isDarkMode);
+                    },
+                    child: Container(
+                      width: 64,
+                      height: 32,
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: provider.isDarkMode
+                            ? Colors.deepPurpleAccent
+                            : Colors.grey.shade300,
+                      ),
+                      child: Stack(
+                        children: [
+                          AnimatedPositioned(
+                            // Animasyon için kullanılıyor. Soldan sağa sağdan sola
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeInOut,
+                            left: provider.isDarkMode ? 30 : 0,
+                            top: 0,
+                            bottom: 0,
+                            child: Container(
+                              width: 26,
+                              height: 26,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 4,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  provider.isDarkMode
+                                      ? Icons
+                                          .nightlight_round // Ay ikonu (sağda)
+                                      : Icons.wb_sunny, // Güneş ikonu (solda)
+                                  color: provider.isDarkMode
+                                      ? Colors.deepPurpleAccent
+                                      : Colors.amber,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
+
+                // SwitchListTile(
+                //   secondary: const Icon(Icons.brightness_6),
+                //   title: const Text('Tema (Açık/Koyu)'),
+                //   value: provider.isDarkMode,
+                //   onChanged: (val) {
+                //     provider.toggleTheme(val);
+                //   },
+                // ),
+
                 ListTile(
                   leading: const Icon(Icons.share),
                   title: const Text('Uygulamayı Paylaş'),
@@ -127,6 +195,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // paylaşım kodu
                   },
                 ),
+
                 ListTile(
                   leading: const Icon(Icons.privacy_tip),
                   title: const Text('Gizlilik Politikası'),
