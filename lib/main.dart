@@ -3,7 +3,7 @@ import 'package:mobile_ai_project/appbar_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/main_screen.dart';
-
+   
 void main() {
   runApp(
     ChangeNotifierProvider(

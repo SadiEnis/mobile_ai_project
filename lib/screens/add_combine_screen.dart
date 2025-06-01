@@ -194,7 +194,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: 300,
               child: TextField(
                 controller: _nameController,
@@ -220,7 +220,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
             ),
             _buildClothSelector('Ayakkabı'),
             const SizedBox(height: 16),
-            Container(
+            SizedBox(
               width: 200,
               height: 45,
               child: ElevatedButton(

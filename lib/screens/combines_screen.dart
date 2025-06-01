@@ -80,13 +80,17 @@ class _MainScreenState extends State<CombinesScreen> {
         margin: const EdgeInsets.symmetric(vertical: 10),
         height: 120,
         decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.white,
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white.withOpacity(0.1),
+          color: Colors.black.withOpacity(.4),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(16),

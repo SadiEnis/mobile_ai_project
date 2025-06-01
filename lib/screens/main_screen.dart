@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mobile_ai_project/appbar_provider.dart';
 import 'package:mobile_ai_project/screens/settings_sreen.dart';
@@ -182,11 +181,117 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: const Icon(Icons.add),
             ),
-            body: Expanded(child: Center(child: Text("ANA SAYFA"))),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(bottom: 32),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "ChatBot",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  hintText: "Coming Soon...",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                              ),
+                              child: const Text("Gönder"),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // 🌸 Kreasyon Başlığı
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Kreasyon Önerileri",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      children: [
+                        _buildImageButton("lib/assets/spring.png", "İlkbahar"),
+                        _buildImageButton("lib/assets/summer.jpg", "Yaz"),
+                        _buildImageButton("lib/assets/fall.png", "Sonbahar"),
+                        _buildImageButton("lib/assets/winter.png", "Kış"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           )
         : Scaffold(
             body:
                 _buildLoginPage()); // Giriş yapmamışsa cinsiyet seçme ekranı ve isim girme ekranı gelecek.
+  }
+
+  Widget _buildImageButton(String imagePath, String label) {
+    return GestureDetector(
+      onTap: () {
+        // Tepki vermeyecek şekilde bırakıldı.
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildLoginPage() {

@@ -18,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   File? _profileImage;
   String _name = 'Ad Soyad';
   String _gender = 'Belirtilmedi';
-  bool _isDarkMode = false;
+  final bool _isDarkMode = false;
 
   Future<void> _pickImage() async {
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery);

@@ -54,7 +54,7 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
+                SizedBox(
                   width: 300,
                   child: TextField(
                     controller: _nameController,
@@ -65,7 +65,7 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
+                SizedBox(
                   width: 300,
                   child: DropdownButtonFormField<String>(
                     decoration: const InputDecoration(
@@ -84,7 +84,7 @@ class _AddClothesScreenState extends State<AddClothesScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
+                SizedBox(
                   width: 150,
                   height: 45,
                   child: ElevatedButton(
