@@ -6,6 +6,10 @@ import 'package:provider/provider.dart';
 
 import '../appbar_provider.dart';
 
+// Bu ekran, kullanıcıların yeni kombinler eklemesine olanak tanır.
+// Kullanıcı, kombin için bir isim girer ve ardından her bir kıyafet kategorisi için seçim yapar.
+// Seçilen kıyafetler, cihazın depolama alanında JSON formatında kaydedilir.
+
 class AddCombineScreen extends StatefulWidget {
   const AddCombineScreen({super.key});
 
@@ -22,7 +26,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
     'Alt': 0,
     'Çanta': 0,
     'Ayakkabı': 0,
-  };
+  }; // Kıyafet kategorileri için başlangıç indeksleri
   final Map<String, Map<String, dynamic>?> _selected = {
     'Baş': null,
     'Üst': null,
@@ -30,17 +34,21 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
     'Alt': null,
     'Çanta': null,
     'Ayakkabı': null,
-  };
+  }; // Seçilen kıyafetler için başlangıç değerleri
 
   final TextEditingController _nameController = TextEditingController();
 
   @override
-  void initState() {
+  void initState() { // Ekran ilk yüklendiğinde çalışır.
     super.initState();
     _loadClothes();
   }
 
   Future<void> _loadClothes() async {
+    // Uygulama belgeleri dizininden kıyafet verilerini yükler.
+    // Eğer dosya mevcutsa, içeriğini okur ve JSON formatında ayrıştırır.
+    // Ardından, _clothes listesine atar ve durumu günceller.
+
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/clothes.json');
     if (await file.exists()) {
@@ -53,28 +61,36 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
   }
 
   List<Map<String, dynamic>> _filteredClothes(String type) {
+    // Kıyafet listesini kategoriye göre filtreler.
+    // Belirtilen kategoriye ait kıyafetleri döndürür.
+
     return _clothes.where((item) => item['category'] == type).toList();
   }
 
   Widget _buildClothSelector(String title) {
+    // Belirtilen kategori için kıyafet seçici widget'ı oluşturur.
+    // Kategoriye ait kıyafetleri filtreler, mevcut indeksi ve seçilen kıyafeti alır.
+    // Kullanıcı, sol ve sağ ok butonları ile kıyafetler arasında geçiş yapabilir.
+    // Seçilen kıyafeti kaldırmak için çarpı butonu da bulunur.
+
     var filtered = _filteredClothes(title);
     if (title == "DışGiyim") {
-      filtered = _filteredClothes("Üst");
+      filtered = _filteredClothes("Üst"); // Dış giyim için üst kategorisinden filtreleme yapar. Dış giyim, üst kategorisinden seçilir.
     } else {
-      filtered = _filteredClothes(title);
+      filtered = _filteredClothes(title); // Diğer kategoriler için kendi kategorisinden filtreleme yapar.
     }
     final currentIndex = _indices[title]!;
-    final selected = _selected[title]; // Değeri doğrudan al
+    final selected = _selected[title]; // Seçilen kıyafet
 
     return Column(
       children: [
         Text(title,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Row(
+        Row( // Yan yana üç satır bulunur: Sol ok, fotoğraf ve sağ ok-çarpı butonları.
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
+            IconButton( // Sol ok butonu
               icon: const Icon(Icons.arrow_left),
               onPressed: (filtered.isEmpty || selected == null)
                   ? null
@@ -87,7 +103,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
                       });
                     },
             ),
-            Container(
+            Container( // Kıyafet fotoğrafları
               width: 80,
               height: 110,
               decoration: BoxDecoration(
@@ -103,7 +119,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
                       ),
                     ),
             ),
-            Column(
+            Column( // Sağ ok ve çarpı butonları
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_right),
@@ -136,6 +152,10 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
   }
 
   Future<void> _saveCombination() async {
+    // Kombin kaydetme işlemi yapar.
+    // Kullanıcıdan kombin ismi alır, eğer boşsa uyarı gösterir.
+    // Uygulama belgeleri dizininde "combines.json" dosyasına kaydeder.
+    
     final String name = _nameController.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -147,7 +167,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/combines.json');
 
-    List<Map<String, dynamic>> existing = [];
+    List<Map<String, dynamic>> existing = []; // Mevcut kombinleri tutar.
     if (await file.exists()) {
       final data = await file.readAsString();
       if (data.trim().isNotEmpty) {
@@ -162,7 +182,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
       }
     }
 
-    // Kombin nesnesi
+    // Yeni kombin verisini oluşturur.
     final Map<String, dynamic> combination = {
       'name': name,
       'Baş': _selected['Baş']?['name'],
@@ -174,7 +194,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
     };
 
     existing.add(combination);
-    await file.writeAsString(jsonEncode(existing));
+    await file.writeAsString(jsonEncode(existing)); // Kombin Dart nesnesini JSON formatında dosyaya kaydeder.
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Kombin kaydedildi!")),
@@ -205,6 +225,7 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
               ),
             ),
             const SizedBox(height: 16),
+            // Kıyafet kategorileri için seçim widget'ları oluşturulur. Sayfa tasarımı üstte Baş ortada Üst ve Dış onların altında Alt ve Çanta en altta Ayakkabı bulunacak şekilde yapıldı.
             _buildClothSelector('Baş'),
             Row(
               children: [
@@ -220,13 +241,14 @@ class _AddCombineScreenState extends State<AddCombineScreen> {
             ),
             _buildClothSelector('Ayakkabı'),
             const SizedBox(height: 16),
+            
             SizedBox(
               width: 200,
               height: 45,
               child: ElevatedButton(
                 onPressed: () async {
                   await _saveCombination();
-                  Navigator.pop(context, true); // 👈 Ana sayfaya 'true' ile dön
+                  Navigator.pop(context, true); // Kombin kaydedildikten sonra geri döner.
                 },
                 child: const Text('Kaydet'),
               ),

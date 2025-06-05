@@ -11,17 +11,17 @@ class AppBarThemeProvider extends ChangeNotifier {
     'Pembe': Colors.pink,
     'Sarı': Colors.yellow,
     'Turkuaz': Colors.tealAccent,
-  };
+  }; // Uygulama içinde kullanılacak renk seçenekleri.
 
   late Color _appBarColor;
   late String _selectedColorName;
   bool _isDarkMode = false;
-  bool _isInitialized = false;
-  // Uygulama başlatıldığında ayarların yüklendiğini kontrol etmek için kullanılır.
+  bool _isInitialized = false; // Uygulama başlatıldığında ayarların yüklendiğini kontrol etmek için kullanılır.
 
-  Color get appBarColor => _appBarColor;
-  String get selectedColorName => _selectedColorName;
-  bool get isDarkMode => _isDarkMode;
+  Color get appBarColor => _appBarColor;  // AppBar'ın rengini tutar. get yöntemi ile erişilir.
+  // Bu renk, kullanıcı tarafından seçilen renge göre değişir.
+  String get selectedColorName => _selectedColorName; // Kullanıcının seçtiği renk adını tutar.
+  bool get isDarkMode => _isDarkMode; // Koyu modun açık mı kapalı mı olduğunu tutar. Sayfalarda bu değişkenlerin değerlerine göre değişiklik yapılır.
   bool get isInitialized => _isInitialized;
 
   ThemeMode get themeMode => _isDarkMode ? ThemeMode.dark : ThemeMode.light;
@@ -39,8 +39,8 @@ class AppBarThemeProvider extends ChangeNotifier {
   Future<void> setColorByName(String name) async {
     _selectedColorName = name;
     _appBarColor = colorOptions[name]!;
-    notifyListeners();
-    await _saveSettingsToFile();
+    notifyListeners(); // Kullanıcı arayüzünü günceller.
+    await _saveSettingsToFile(); // Ayarları dosyaya kaydeder. Metod aşağıda tanımlanmıştır.
 
     // Renk değiştiğinde çağrılır.
     // Kullanıcı arayüzünü günceller.
@@ -66,6 +66,7 @@ class AppBarThemeProvider extends ChangeNotifier {
     } catch (e) {
       print('HATA: Ayarlar kaydedilemedi: $e');
     }
+
     // Ayarları dosyaya kaydeder.
     // Renk adı, renk değeri ve koyu mod durumu ile birlikte.
     // Her birini ayırmak için '|' karakteri kullanılır.
@@ -73,6 +74,8 @@ class AppBarThemeProvider extends ChangeNotifier {
 
   Future<void> _loadSettingsFromFile() async {
     // Dosyadan ayarları yükler.
+    // Böylece uygulama her başlatıldığında kullanıcı ayarları korunur.
+
     try {
       final file = await _getSettingsFile();
       if (await file.exists()) {
@@ -97,8 +100,9 @@ class AppBarThemeProvider extends ChangeNotifier {
 
   Future<File> _getSettingsFile() async {
     final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/settings.txt');
-    // Ayarları saklamak için kullanılacak dosya yolu
+    return File('${dir.path}/settings.txt'); // Ayarları saklamak için kullanılacak dosya yolu
     // Uygulama belgeleri dizininde "settings.txt" adında bir dosya oluşturur.
+
+    // Metod Future tanımlanmıştır çünkü dosya işlemleri asenkron olarak yapılır.
   }
 }

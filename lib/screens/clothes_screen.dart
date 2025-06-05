@@ -7,6 +7,9 @@ import 'package:provider/provider.dart';
 
 import '../appbar_provider.dart';
 
+// Bu ekran, kullanıcıların kıyafetlerini görüntülemesine ve düzenlemesine olanak tanır.
+// Kullanıcı, kıyafetleri görüntüleyebilir, ekleyebilir, düzenleyebilir ve silebilir.
+
 class ClothesScreen extends StatefulWidget {
   const ClothesScreen({super.key});
 
@@ -24,6 +27,10 @@ class _MyClothesScreenState extends State<ClothesScreen> {
   }
 
   Future<void> _loadClothes() async {
+    // Uygulama belgeleri dizininden kıyafet verilerini yükler.
+    // Eğer dosya mevcutsa, içeriğini okur ve JSON formatında ayrıştırır.
+    // Ardından, _clothes listesine atar ve durumu günceller.
+    
     final directory = await getApplicationDocumentsDirectory();
     final path = '${directory.path}/clothes.json';
     final file = File(path);
@@ -38,6 +45,9 @@ class _MyClothesScreenState extends State<ClothesScreen> {
   }
 
   void _openDetailsModal(Map<String, dynamic> item) {
+    // Kıyafet detaylarını gösteren modal alt sayfasını açar.
+    // Kullanıcı, kıyafet ismini düzenleyebilir ve kıyafeti silebilir.
+
     final nameController = TextEditingController(text: item['name']);
     showModalBottomSheet(
       context: context,
@@ -46,12 +56,12 @@ class _MyClothesScreenState extends State<ClothesScreen> {
         padding: const EdgeInsets.all(16),
         child: Wrap(
           children: [
-            ClipRRect(
+            ClipRRect( // Kıyafet resmini gösterir.
               borderRadius: BorderRadius.circular(12),
               child: Image.file(File(item['path']), fit: BoxFit.cover),
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextField( // Kıyafet kategorisini gösterir, düzenlenemez.
               decoration: const InputDecoration(
                 labelText: 'Kategori',
                 border: OutlineInputBorder(),
@@ -60,7 +70,7 @@ class _MyClothesScreenState extends State<ClothesScreen> {
               readOnly: true,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextField( // Kıyafet ismini düzenlemek için kullanılır.
               decoration: const InputDecoration(
                 labelText: 'Kıyafet İsmi',
                 border: OutlineInputBorder(),
@@ -68,7 +78,7 @@ class _MyClothesScreenState extends State<ClothesScreen> {
               controller: nameController,
             ),
             const SizedBox(height: 16),
-            Row(
+            Row( // Silme ve kaydetme butonlarını içerir.
               children: [
                 Expanded(
                   child: ElevatedButton(
@@ -100,21 +110,31 @@ class _MyClothesScreenState extends State<ClothesScreen> {
   }
 
   Future<void> _deleteClothes(Map<String, dynamic> item) async {
+    // Kıyafeti siler ve dosyadan günceller.
+    // Kıyafet ismine göre _clothes listesinden siler ve dosyayı günceller.
+    // Metod Future'dur çünkü asenkron işlemler içerir.
+
     _clothes.removeWhere((element) => element['name'] == item['name']);
     await _saveClothes();
   }
 
   Future<void> _updateClothes(
+    // Kıyafet ismini günceller.
+    // Kullanıcı tarafından girilen yeni ismi alır ve _clothes listesindeki ilgili öğeyi günceller.
+
       Map<String, dynamic> oldItem, String newName) async {
     final index =
-        _clothes.indexWhere((item) => item['name'] == oldItem['name']);
+        _clothes.indexWhere((item) => item['name'] == oldItem['name']); // Eski kıyafet ismine göre indeksi bulur.
     if (index != -1) {
-      _clothes[index]['name'] = newName.trim();
+      _clothes[index]['name'] = newName.trim(); // trim metodu ile baştaki ve sondaki boşlukları kaldırır.
       await _saveClothes();
     }
   }
 
   Future<void> _saveClothes() async {
+    // Kıyafet listesini uygulama belgeleri dizinine kaydeder.
+    // Kıyafet verilerini JSON formatında kodlar ve "clothes.json" dosyasına yazar.
+    
     final directory = await getApplicationDocumentsDirectory();
     final path = '${directory.path}/clothes.json';
     final file = File(path);
@@ -131,20 +151,20 @@ class _MyClothesScreenState extends State<ClothesScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: GridView.builder(
+        child: GridView.builder( // Kıyafetleri ızgara düzeninde gösterir. 
           itemCount: _clothes.length + 1,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 3 / 4,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount( // ızgara düzeni için ayarlar.
+            crossAxisCount: 3, // Her satırda 3 öğe gösterir.
+            childAspectRatio: 3 / 4, // Her öğenin genişlik-yükseklik oranı 3:4
+            crossAxisSpacing: 8, // Öğeler arasındaki yatay boşluk (px)
+            mainAxisSpacing: 8, // Öğeler arasındaki dikey boşluk (px)
           ),
-          itemBuilder: (context, index) {
+          itemBuilder: (context, index) { // Kıyafet öğelerini oluşturur.
             if (index == 0) {
-              return GestureDetector(
+              return GestureDetector( // İlk öğe, yeni kıyafet ekleme butonudur. Tıklanabilir içinde + butonu olan bir resim butondur.
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute( // Yeni kıyafet ekleme ekranına yönlendirir.
                       builder: (context) => const AddClothesScreen()),
                 ),
                 child: Container(
@@ -157,13 +177,13 @@ class _MyClothesScreenState extends State<ClothesScreen> {
               );
             }
             final item = _clothes[index - 1];
-            return GestureDetector(
+            return GestureDetector( // Kıyafet öğesine tıklanabilirlik ekler.
               onTap: () => _openDetailsModal(item),
-              child: ClipRRect(
+              child: ClipRRect( // ClpRRect, köşeleri yuvarlatılmış bir resim gösterir.
                 borderRadius: BorderRadius.circular(12),
                 child: Image.file(
                   File(item['path']),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.cover, // Resmi kapsayıcıya sığdırır.
                 ),
               ),
             );

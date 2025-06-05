@@ -12,6 +12,10 @@ import 'package:mobile_ai_project/screens/add_combine_screen.dart';
 import 'package:mobile_ai_project/screens/clothes_screen.dart';
 import 'package:mobile_ai_project/screens/combines_screen.dart';
 
+// Bu ekran, uygulamanın ana ekranıdır. Kullanıcı giriş yapmamışsa cinsiyet seçme ve isim girme ekranı gösterilir.
+// Kullanıcı giriş yapmışsa, ana sayfa, kıyafet ekleme, kıyafetlerim, kombin ekleme, kombinlerim gibi seçenekler sunulur.
+// Kullanıcı, uygulama içinde gezinmek için bir drawer kullanabilir. Ayrıca, kullanıcı geri bildirim gönderebilir ve ayarları değiştirebilir.
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -49,8 +53,9 @@ class _MainScreenState extends State<MainScreen> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  UserAccountsDrawerHeader(
-                    // Kullanıcı bilgilerini göstermek için UserAccountsDrawerHeader kullandık. Kullanıcı adı ve cinsiyet bilgilerini gösteriyoruz.
+                  UserAccountsDrawerHeader( // Kullanıcı hesabı bilgilerini göstermek için UserAccountsDrawerHeader kullandık.
+                    // UserAccountsDrawerHeader, Drawer içinde kullanıcı bilgilerini göstermek için kullanılır.
+                    // Kullanıcı adı, cinsiyet ve profil resmi gibi bilgileri gösterir.
                     accountName: Text(_username,
                         style: const TextStyle(color: Colors.black)),
                     accountEmail: Text('Cinsiyet: $_gender',
@@ -146,15 +151,6 @@ class _MainScreenState extends State<MainScreen> {
                       Navigator.pop(context);
                     },
                   ),
-
-                  ListTile(
-                    leading: const Icon(Icons.info),
-                    title: const Text('Hakkımızda'),
-                    onTap: () {
-                      // Hakkımızda sayfası (sonra)
-                      Navigator.pop(context);
-                    },
-                  ),
                   ListTile(
                     leading: const Icon(Icons.settings),
                     title: const Text('Ayarlar'),
@@ -175,13 +171,14 @@ class _MainScreenState extends State<MainScreen> {
                 // Kıyafet ekle
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute( // FloatingActionButton'a tıklandığında AddClothesScreen'e yönlendirir.
                       builder: (context) => const AddClothesScreen()),
                 );
               },
               child: const Icon(Icons.add),
             ),
-            body: Padding(
+            body: Padding( // Ana sayfa içeriği geçici bir sayfadır. Herhangi bir işlevliği bulunmamaktadır.
+              // Farklı mevsimlere göre kreasyon önerileri sunar. Ayrıca bir ChatBot bölümü de eklenmiştir. Bunkar henüz işlevsel değildir.
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
@@ -227,7 +224,6 @@ class _MainScreenState extends State<MainScreen> {
                       ],
                     ),
                   ),
-                  // 🌸 Kreasyon Başlığı
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -260,9 +256,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildImageButton(String imagePath, String label) {
-    return GestureDetector(
+    return GestureDetector( // Bir resim butonu oluşturur.
       onTap: () {
-        // Tepki vermeyecek şekilde bırakıldı.
+        // Henüz tepki vermeyecek şekilde bırakıldı.
       },
       child: Stack(
         fit: StackFit.expand,
@@ -295,6 +291,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildLoginPage() {
+    // Giriş yapmamış kullanıcılar için cinsiyet seçme ve isim girme ekranı.
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -324,6 +322,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _checkUser() async {
+    // Uygulama başlatıldığında kullanıcı verilerini kontrol eder.
+    // Eğer kullanıcı verileri varsa, kullanıcı adı ve cinsiyet bilgilerini alır.
+    // Kullanıcı verileri yoksa, giriş yapmamış olarak kalır.
+    // Kullanıcı verileri, uygulama belgeleri dizininde user_data.txt dosyasında saklanır.
+
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/user_data.txt');
 
@@ -341,6 +344,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _saveUser(String name, String gender) async {
+    // Kullanıcı adı ve cinsiyet bilgilerini user_data.txt dosyasına kaydeder.
+    // Kullanıcı giriş yaptıktan sonra bu metod çağrılır.
+
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/user_data.txt');
     await file.writeAsString('$name,$gender');
@@ -353,6 +359,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _selectGender(String gender) {
+    // Cinsiyet seçildiğinde, kullanıcıdan ismini girmesini ister. Bir AlertDialog gösterir.
+    // Kullanıcı ismini girdikten sonra, _saveUser metodunu çağırarak kullanıcı verilerini kaydeder.
+
     final nameController = TextEditingController();
 
     showDialog(
@@ -379,6 +388,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _genderButton(String gender, Color color) {
+    // Cinsiyet seçimi için buton oluşturur. Butona tıklandığında _selectGender metodunu çağırır.
+    // Butonun rengi, cinsiyete göre değişir. Kadın için pembe, erkek için mavi kullanılır.
+    
     return ElevatedButton(
       onPressed: () => _selectGender(gender),
       style: ElevatedButton.styleFrom(

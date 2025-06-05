@@ -4,32 +4,32 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.6.1
+  sdk: ^3.6.1 
 
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^1.0.7
-  path_provider: ^2.0.15
-  provider: ^6.1.1
-  path: ^1.8.3
+  image_picker: ^1.0.7 # Resim seçmek için kullanılır. Kameradan veya galeriden resim seçmek için kullanılıyoruz.
+  path_provider: ^2.0.15 # Cihazın dosya sistemine erişmek için kullanılır
+  provider: ^6.1.1 # Durum yönetimi için kullanılır. Uygulama durumunu yönetmek için kullanıyoruz. Değişiklikleri dinlemek ve güncellemek için kullanılır.
+  path: ^1.8.3 # Dosya yollarını yönetmek için kullanılır. Dosya yollarını yönetmek için kullanıyoruz.
 
 
 
-dev_dependencies:
+dev_dependencies: # Geliştirme bağımlılıkları şunlardır:
   flutter_test:
     sdk: flutter
 
-  url_launcher: ^6.2.5
-  flutter_launcher_icons: ^0.13.1
-  flutter_lints: ^5.0.0
+  url_launcher: ^6.2.5 # URL'leri açmak için kullanılır
+  flutter_launcher_icons: ^0.13.1 # Uygulama simgelerini özelleştirmek için kullanılır
+  flutter_lints: ^5.0.0 # Flutter lint kuralları. Lint hatalarını yakalamak için kullanılır.
 
-flutter_icons:
+flutter_icons: # Flutter açılışı özelleştirmesi. Açıılırken gösterilen ikon
   android: true
   ios: true
   image_path: "lib/assets/icon/d.png"
 
 flutter:
-  uses-material-design: true
+  uses-material-design: true 
   assets:
-    - lib/assets/
+    - lib/assets/ # Sezon fotoğraflarının eklendiği dizin

@@ -7,6 +7,9 @@ import 'package:mobile_ai_project/screens/combine_detail_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+//  Bu ekran, kullanıcıların kaydettikleri kombinleri görüntülemesine olanak tanır.
+//  Kullanıcı, kombinleri listeleyebilir ve her bir kombin için detayları görüntüleyebilir.
+
 class CombinesScreen extends StatefulWidget {
   const CombinesScreen({super.key});
 
@@ -18,6 +21,9 @@ class _MainScreenState extends State<CombinesScreen> {
   List<Map<String, dynamic>> _combinations = [];
 
   Future<List<Map<String, dynamic>>> loadCombinations() async {
+    // Dosyayı bulur, çeriğini okur ve JSON formatında ayrıştırır.
+    // Ardından, kombinleri liste olarak döner.
+
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/combines.json');
     if (await file.exists()) {
@@ -36,15 +42,14 @@ class _MainScreenState extends State<CombinesScreen> {
         title: const Text('Gardırobum'),
         backgroundColor: context.watch<AppBarThemeProvider>().appBarColor,
       ),
-      // Drawer ekledik. Kullanıcı giriş yapmışsa görünmesini istedik ve kullanıcının yapabileceği işlemleri tek bir bardan görsün istedik.
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Expanded(
-          child: ListView.builder(
+          child: ListView.builder( // Kombinleri listelemek için ListView kullanılır.
             itemCount: _combinations.length,
             itemBuilder: (context, index) {
               final kombin = _combinations[index];
-              return _frostedCard(
+              return _frostedCard( // Kombin kartı için buzlu buğulu bir efekti olan oluşturulur. Metodu aşağıda tanımlandı.
                 kombin['name'] ?? 'Kombin',
                 () {
                   Navigator.push(
@@ -60,7 +65,7 @@ class _MainScreenState extends State<CombinesScreen> {
           ),
         ),
       ),
-    ); // Giriş yapmamışsa cinsiyet seçme ekranı ve isim girme ekranı gelecek.
+    ); 
   }
 
   @override
@@ -74,7 +79,10 @@ class _MainScreenState extends State<CombinesScreen> {
   }
 
   Widget _frostedCard(String text, VoidCallback onTap) {
-    return GestureDetector(
+    // Kombin kartı için buzlu buğulu bir efekt oluşturur.
+    // Kartın üzerine tıklandığında onTap fonksiyonunu çağırır.
+    // Kartın içeriği, verilen metni gösterir. O da kombin ismi olarak girilir.
+    return GestureDetector( // Tıklanabilir
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),

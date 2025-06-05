@@ -3,6 +3,16 @@ import 'package:mobile_ai_project/appbar_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/main_screen.dart';
+
+// Bu uygulama, kullanıcıların açık ve koyu tema arasında geçiş yapabilmesini sağlar.
+// Ayrıca, kullanıcılar uygulamanın AppBar rengini değiştirebilirler.
+// Uygulama, Provider kullanarak durum yönetimini gerçekleştirir.
+// main.dart dosyası, uygulamanın başlangıç noktasıdır.
+// Uygulama, MaterialApp widget'ı ile başlar ve tema ayarlarını içerir.
+// Kullanıcı arayüzü, MainScreen widget'ı ile oluşturulur.
+
+// Ayrıca APP_DOCS\android\app\src\main\AndroidManifest.xml içinde yer alan bir takım izinler var. 
+// Uygulama cihazın kamerasını ve depolama alanını kullanabilmek için bu izinlere ihtiyaç duyar. Bu izinler o dosyada tanımlanmıştır. (E-Mail üzerinden gönderildi.)
    
 void main() {
   runApp(
@@ -29,7 +39,7 @@ class MyApp extends StatelessWidget {
     }
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Debug banner'ı gizle
+      debugShowCheckedModeBanner: false, // Debug banner'ı gizler.
 
       themeMode: provider.themeMode,
       // açık/koyu mod seçimi buradan yapılır. Provider'dan alınır.
@@ -47,6 +57,7 @@ class MyApp extends StatelessWidget {
       ),
       // Açık tema için ayarlanır.
 
+      // Koyu tema için ayarlar.
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         appBarTheme: AppBarTheme(
