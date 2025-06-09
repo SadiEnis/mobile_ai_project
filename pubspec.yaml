@@ -13,21 +13,20 @@ dependencies:
   path_provider: ^2.0.15 # Cihazın dosya sistemine erişmek için kullanılır
   provider: ^6.1.1 # Durum yönetimi için kullanılır. Uygulama durumunu yönetmek için kullanıyoruz. Değişiklikleri dinlemek ve güncellemek için kullanılır.
   path: ^1.8.3 # Dosya yollarını yönetmek için kullanılır. Dosya yollarını yönetmek için kullanıyoruz.
+  url_launcher: ^6.2.5 # URL'leri açmak için kullanılır
 
 
 
 dev_dependencies: # Geliştirme bağımlılıkları şunlardır:
   flutter_test:
     sdk: flutter
-
-  url_launcher: ^6.2.5 # URL'leri açmak için kullanılır
   flutter_launcher_icons: ^0.13.1 # Uygulama simgelerini özelleştirmek için kullanılır
   flutter_lints: ^5.0.0 # Flutter lint kuralları. Lint hatalarını yakalamak için kullanılır.
 
 flutter_icons: # Flutter açılışı özelleştirmesi. Açıılırken gösterilen ikon
   android: true
   ios: true
-  image_path: "lib/assets/icon/d.png"
+  image_path: "lib/assets/icon/mm.png"
 
 flutter:
   uses-material-design: true 
